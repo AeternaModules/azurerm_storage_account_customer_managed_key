@@ -1,3 +1,7 @@
+output "storage_account_customer_managed_keys_id" {
+  description = "Map of id values across all storage_account_customer_managed_keys, keyed the same as var.storage_account_customer_managed_keys"
+  value       = { for k, v in azurerm_storage_account_customer_managed_key.storage_account_customer_managed_keys : k => v.id }
+}
 output "storage_account_customer_managed_keys_federated_identity_client_id" {
   description = "Map of federated_identity_client_id values across all storage_account_customer_managed_keys, keyed the same as var.storage_account_customer_managed_keys"
   value       = { for k, v in azurerm_storage_account_customer_managed_key.storage_account_customer_managed_keys : k => v.federated_identity_client_id }
