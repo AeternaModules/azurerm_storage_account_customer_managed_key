@@ -25,14 +25,6 @@ EOT
     managed_hsm_key_id           = optional(string)
     user_assigned_identity_id    = optional(string)
   }))
-  validation {
-    condition = alltrue([
-      for k, v in var.storage_account_customer_managed_keys : (
-        v.federated_identity_client_id == null || (can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", v.federated_identity_client_id)))
-      )
-    ])
-    error_message = "must be a valid UUID"
-  }
   # --- Unconfirmed validation candidates, derived from azurerm_storage_account_customer_managed_key's provider source ---
   # Not auto-enabled: either a bespoke provider validator we can't safely translate,
   # or a path that crosses a list-typed block (needs its own for_each wrapping).
@@ -49,5 +41,8 @@ EOT
   #   source:    [from commonids.ValidateUserAssignedIdentityID] !ok
   # path: user_assigned_identity_id
   #   source:    [from commonids.ValidateUserAssignedIdentityID] err != nil
+  # path: federated_identity_client_id
+  #   condition: can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", value))
+  #   message:   must be a valid UUID
 }
 
